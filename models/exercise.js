@@ -13,13 +13,29 @@ const exerciseSchema = new mongoose.Schema({
   date: {
     type: String,
   },
-  id: String
+  id: {
+    type: String,
+  }
 });
 
 let Exercise = mongoose.model('Exercise', exerciseSchema);
 
-const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+exports.createAndSaveExercise = (req, done) => {
+  const exercise = new Exercise({
+    description: req.description,
+    duration: req.duration,
+    date: req.date,
+    id: req.id
+  });
+  exercise.save(function (err, data) {
+  done(null , data);});
+  return exercise;
+};
+
+exports.listExercises = (done) => {
+  return Exercise.find({}, function (err, data) {
+    done(null, data);
+  });
 };
 
 const createManyPeople = (arrayOfPeople, done) => {

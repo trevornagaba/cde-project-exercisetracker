@@ -57,3 +57,7 @@ code {
   background-color: #FFFEC4;
   padding: 2px;
 }
+
+button[class=submit]:hover {
+  background-color: #FFFEC4;
+}

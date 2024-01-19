@@ -1,0 +1,55 @@
+# Guidance here >>> https://learnk8s.io/deploying-nodejs-kubernetes
+
+# Deployment details
+# The template.metadata.labels field defines a label for the Pods that wrap your Knote container (app: <app-name>).
+# The selector.matchLabels field selects those Pods with an app: <app-name> label to belong to this Deployment resource.
+# Note that there must be at least one shared label between these two fields.
+
+# Service details
+#Selector selects the Pods to expose according to their labels. In this case, the Service will expose all Pods with a label of app: <app-name>
+# Note how this label corresponds precisely to what you specified for the Pods in the Deployment resource
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cde-project-exercisetracker
+spec:
+# The label below app: cde-project-exercisetracker ties the service to the deployment. See under template metadata below
+  selector:
+    app: cde-project-exercisetracker
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cde-project-exercisetracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cde-project-exercisetracker
+  template:
+    metadata:
+      labels:
+# The label below app: cde-project-exercisetracker ties the deployment to the service
+        app: cde-project-exercisetracker
+    spec:
+      containers:
+        - name: cde-project-exercisetracker
+          image: public.ecr.aws/y6c4b2f0/cde-project-exercisetracker:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              value: mongodb+srv://trevornagaba:test-cluster-01@test-cluster-01.9dvs05n.mongodb.net/
+          imagePullPolicy: Always
+
+
+
+# Note
+# When first installing kubectl, it isn't yet configured to communicate with any server. We will cover this configuration as needed in other procedures. 
+# If you ever need to update the configuration to communicate with a particular cluster, you can run the following command. 
+# Replace region-code with the AWS Region that your cluster is in. Replace my-cluster with the name of your cluster.

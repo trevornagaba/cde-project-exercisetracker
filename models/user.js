@@ -4,19 +4,25 @@ const mongoose = require('../services/mongoose').mongoose;
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-  },
-  id: String
+  }
 });
 
 let User = mongoose.model('User', userSchema);
 
-const createAndSaveUser = (username, done) => {
+exports.createAndSaveUser = (username, done) => {
   const user = new User({
     username: username,
     id: uuid()
   });
   user.save(function (err, data) {
-  done(null , data);})
+  done(null , data);});
+  return user;
+};
+
+exports.listUsers = (done) => {
+  return User.find({}, function (err, data) {
+    done(null, data);
+  });
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
@@ -62,5 +68,3 @@ const queryChain = (done) => {
 
   done(null /*, data*/);
 };
-
-exports.User = User;

@@ -4,7 +4,9 @@
 	"description": "A REST API project, part of Free Code Camp's curriculum",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js"
+		"start": "node index.js",
+		"dev": "nodemon index.js",
+		"test": "jest --testTimeout=50000"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.2",
@@ -21,5 +23,9 @@
 	"keywords": [
 		"node",
 		"express"
-	]
+	],
+	"devDependencies": {
+		"jest": "^29.7.0",
+		"nodemon": "^3.0.3"
+	}
 }

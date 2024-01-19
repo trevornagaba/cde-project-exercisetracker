@@ -20,16 +20,30 @@ app.get('/', (req, res) => {
 console.log(uuid());
 
 app.route('/api/users').get(function(req, res) {
-  res.json("Here");
+  User.listUsers(function(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(data);
+      res.json(data);
+    }
+  });
 }).post(function(req, res) {
-  console.log(req);
-  // Error: User.createandSave is not a function
-  User.createandSave({username: req.body.username}, function(err, data) {});
-  res.json({username: req.body.username, _id: data._id});
+  User.createAndSaveUser(req.body.username, function(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json({user: data});
+    }});
 })
 
-app.post('/api/:id/exercise', function(req, res) {
-  res.json({name: string});
+app.post('/api/users/:id/exercises', function(req, res) {
+  Exercise.createAndSaveExercise(req.body, function(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json({exercise: data});
+    }});
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
